@@ -1,0 +1,16 @@
+{
+  "name": "Digital Phantom",
+  "description": "A spectral entity born from corrupted data streams, flickering between existence and void across parallel networks. RGB channels split and glitch as a watchful digital eye peers through scan lines of code.",
+  "image": "ipfs://bafybeidjtwb5bj3eufybjvr4swrfkvga4c5bedcpg4hm2inutfpvc3e5ty/2-digital-phantom.svg",
+  "external_url": "https://facinet.vercel.app",
+  "attributes": [
+    { "trait_type": "Collection", "value": "Facinet Genesis" },
+    { "trait_type": "Rarity", "value": "Rare" },
+    { "trait_type": "Style", "value": "Glitch Art" },
+    { "trait_type": "Color Theme", "value": "Cyan / Teal" },
+    { "trait_type": "Animation", "value": "Yes" },
+    { "trait_type": "Price (USDC)", "display_type": "number", "value": 2 },
+    { "trait_type": "Network", "value": "Avalanche Fuji" },
+    { "trait_type": "Edition", "value": "#0002" }
+  ]
+}

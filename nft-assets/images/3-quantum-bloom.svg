@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="qb-bg" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#1a0815"/>
+      <stop offset="50%" stop-color="#10060e"/>
+      <stop offset="100%" stop-color="#050510"/>
+    </radialGradient>
+    <radialGradient id="qb-glow" cx="50%" cy="50%" r="35%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.2"/>
+      <stop offset="60%" stop-color="#ec4899" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="qb-core" cx="50%" cy="50%" r="15%">
+      <stop offset="0%" stop-color="#fbcfe8" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#ec4899" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="qb-soft">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="qb-glow-lg">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="600" fill="url(#qb-bg)"/>
+
+  <!-- Outer ambient glow -->
+  <circle cx="300" cy="300" r="250" fill="url(#qb-glow)"/>
+
+  <!-- Outer particle ring -->
+  <circle cx="527" cy="300" r="1.8" fill="#ec4899" opacity="0.25"><animate attributeName="opacity" values="0.25;0.1;0.25" dur="3s" repeatCount="indefinite"/></circle>
+  <circle cx="509" cy="210" r="1.3" fill="#f472b6" opacity="0.2"><animate attributeName="opacity" values="0.2;0.05;0.2" dur="4s" repeatCount="indefinite"/></circle>
+  <circle cx="457" cy="135" r="2" fill="#ec4899" opacity="0.3"><animate attributeName="opacity" values="0.3;0.1;0.3" dur="2.5s" repeatCount="indefinite"/></circle>
+  <circle cx="380" cy="85" r="1.5" fill="#f472b6" opacity="0.2"/>
+  <circle cx="300" cy="73" r="1.8" fill="#ec4899" opacity="0.35"><animate attributeName="opacity" values="0.35;0.1;0.35" dur="3.5s" repeatCount="indefinite"/></circle>
+  <circle cx="220" cy="85" r="1.2" fill="#f472b6" opacity="0.2"/>
+  <circle cx="143" cy="135" r="1.7" fill="#ec4899" opacity="0.25"><animate attributeName="opacity" values="0.25;0.08;0.25" dur="4.2s" repeatCount="indefinite"/></circle>
+  <circle cx="91" cy="210" r="1.5" fill="#f472b6" opacity="0.2"/>
+  <circle cx="73" cy="300" r="2" fill="#ec4899" opacity="0.3"><animate attributeName="opacity" values="0.3;0.1;0.3" dur="3.2s" repeatCount="indefinite"/></circle>
+  <circle cx="91" cy="390" r="1.3" fill="#f472b6" opacity="0.2"/>
+  <circle cx="143" cy="465" r="1.8" fill="#ec4899" opacity="0.25"><animate attributeName="opacity" values="0.25;0.08;0.25" dur="2.8s" repeatCount="indefinite"/></circle>
+  <circle cx="220" cy="515" r="1.5" fill="#f472b6" opacity="0.2"/>
+  <circle cx="300" cy="527" r="2" fill="#ec4899" opacity="0.3"><animate attributeName="opacity" values="0.3;0.12;0.3" dur="3.8s" repeatCount="indefinite"/></circle>
+  <circle cx="380" cy="515" r="1.3" fill="#f472b6" opacity="0.2"/>
+  <circle cx="457" cy="465" r="1.7" fill="#ec4899" opacity="0.25"><animate attributeName="opacity" values="0.25;0.1;0.25" dur="4.5s" repeatCount="indefinite"/></circle>
+  <circle cx="509" cy="390" r="1.5" fill="#f472b6" opacity="0.2"/>
+
+  <!-- Outer petals layer (12 petals, slow clockwise) -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="80s" repeatCount="indefinite"/>
+    <ellipse cx="300" cy="300" rx="28" ry="130" fill="none" stroke="#ec4899" stroke-opacity="0.06" stroke-width="1.5" transform="rotate(0 300 300)"/>
+    <ellipse cx="300" cy="300" rx="28" ry="130" fill="none" stroke="#ec4899" stroke-opacity="0.07" stroke-width="1.5" transform="rotate(30 300 300)"/>
+    <ellipse cx="300" cy="300" rx="28" ry="130" fill="none" stroke="#ec4899" stroke-opacity="0.08" stroke-width="1.5" transform="rotate(60 300 300)"/>
+    <ellipse cx="300" cy="300" rx="28" ry="130" fill="none" stroke="#f472b6" stroke-opacity="0.07" stroke-width="1.5" transform="rotate(90 300 300)"/>
+    <ellipse cx="300" cy="300" rx="28" ry="130" fill="none" stroke="#ec4899" stroke-opacity="0.08" stroke-width="1.5" transform="rotate(120 300 300)"/>
+    <ellipse cx="300" cy="300" rx="28" ry="130" fill="none" stroke="#ec4899" stroke-opacity="0.06" stroke-width="1.5" transform="rotate(150 300 300)"/>
+  </g>
+
+  <!-- Middle petals (8 petals, counter-clockwise) -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate" from="360 300 300" to="0 300 300" dur="55s" repeatCount="indefinite"/>
+    <ellipse cx="300" cy="300" rx="18" ry="90" fill="#ec4899" fill-opacity="0.02" stroke="#f472b6" stroke-opacity="0.1" stroke-width="1" transform="rotate(0 300 300)"/>
+    <ellipse cx="300" cy="300" rx="18" ry="90" fill="#ec4899" fill-opacity="0.02" stroke="#f472b6" stroke-opacity="0.1" stroke-width="1" transform="rotate(45 300 300)"/>
+    <ellipse cx="300" cy="300" rx="18" ry="90" fill="#ec4899" fill-opacity="0.02" stroke="#f472b6" stroke-opacity="0.12" stroke-width="1" transform="rotate(90 300 300)"/>
+    <ellipse cx="300" cy="300" rx="18" ry="90" fill="#ec4899" fill-opacity="0.02" stroke="#f472b6" stroke-opacity="0.1" stroke-width="1" transform="rotate(135 300 300)"/>
+  </g>
+
+  <!-- Inner petals (6 petals, clockwise) -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="40s" repeatCount="indefinite"/>
+    <ellipse cx="300" cy="300" rx="12" ry="60" fill="#ec4899" fill-opacity="0.03" stroke="#fbcfe8" stroke-opacity="0.1" stroke-width="0.8" transform="rotate(0 300 300)"/>
+    <ellipse cx="300" cy="300" rx="12" ry="60" fill="#ec4899" fill-opacity="0.03" stroke="#fbcfe8" stroke-opacity="0.1" stroke-width="0.8" transform="rotate(60 300 300)"/>
+    <ellipse cx="300" cy="300" rx="12" ry="60" fill="#ec4899" fill-opacity="0.03" stroke="#fbcfe8" stroke-opacity="0.1" stroke-width="0.8" transform="rotate(120 300 300)"/>
+  </g>
+
+  <!-- Geometric hexagons -->
+  <polygon points="300,200 387,250 387,350 300,400 213,350 213,250" fill="none" stroke="#ec4899" stroke-opacity="0.05" stroke-width="0.8"/>
+  <polygon points="300,230 361,262.5 361,337.5 300,370 239,337.5 239,262.5" fill="none" stroke="#ec4899" stroke-opacity="0.08" stroke-width="0.5"/>
+  <polygon points="300,255 338,277 338,323 300,345 262,323 262,277" fill="none" stroke="#f472b6" stroke-opacity="0.1" stroke-width="0.5"/>
+
+  <!-- Core glow layers -->
+  <circle cx="300" cy="300" r="50" fill="url(#qb-core)"/>
+  <circle cx="300" cy="300" r="30" fill="#ec4899" fill-opacity="0.06" filter="url(#qb-glow-lg)">
+    <animate attributeName="r" values="30;35;30" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="300" cy="300" r="16" fill="#ec4899" fill-opacity="0.1" stroke="#ec4899" stroke-opacity="0.25" stroke-width="1">
+    <animate attributeName="r" values="16;20;16" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.25;0.4;0.25" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="300" cy="300" r="6" fill="#f472b6" fill-opacity="0.4" filter="url(#qb-soft)"/>
+  <circle cx="300" cy="300" r="2.5" fill="#fff" opacity="0.85">
+    <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Title watermark -->
+  <text x="300" y="580" text-anchor="middle" fill="#ec4899" fill-opacity="0.1" font-family="monospace" font-size="10" letter-spacing="4">QUANTUM BLOOM</text>
+</svg>

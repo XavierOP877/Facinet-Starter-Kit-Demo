@@ -1,0 +1,16 @@
+{
+  "name": "Neural Drift",
+  "description": "A living map of synthetic consciousness, where every pulse of light is a thought forming in the machine mind. Data flows along neural pathways as nodes pulse with emergent intelligence.",
+  "image": "ipfs://bafybeidjtwb5bj3eufybjvr4swrfkvga4c5bedcpg4hm2inutfpvc3e5ty/4-neural-drift.svg",
+  "external_url": "https://facinet.vercel.app",
+  "attributes": [
+    { "trait_type": "Collection", "value": "Facinet Genesis" },
+    { "trait_type": "Rarity", "value": "Legendary" },
+    { "trait_type": "Style", "value": "Network Graph" },
+    { "trait_type": "Color Theme", "value": "Emerald / Green" },
+    { "trait_type": "Animation", "value": "Yes" },
+    { "trait_type": "Price (USDC)", "display_type": "number", "value": 5 },
+    { "trait_type": "Network", "value": "Avalanche Fuji" },
+    { "trait_type": "Edition", "value": "#0004" }
+  ]
+}

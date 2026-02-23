@@ -1,0 +1,16 @@
+{
+  "name": "Cosmic Nexus",
+  "description": "A convergence point in the fabric of spacetime where dimensions fold inward, revealing the infinite lattice of existence. Spiraling rings orbit a luminous core, surrounded by distant stars and nebula clouds.",
+  "image": "ipfs://bafybeidjtwb5bj3eufybjvr4swrfkvga4c5bedcpg4hm2inutfpvc3e5ty/1-cosmic-nexus.svg",
+  "external_url": "https://facinet.vercel.app",
+  "attributes": [
+    { "trait_type": "Collection", "value": "Facinet Genesis" },
+    { "trait_type": "Rarity", "value": "Uncommon" },
+    { "trait_type": "Style", "value": "Generative" },
+    { "trait_type": "Color Theme", "value": "Purple / Violet" },
+    { "trait_type": "Animation", "value": "Yes" },
+    { "trait_type": "Price (USDC)", "display_type": "number", "value": 1 },
+    { "trait_type": "Network", "value": "Avalanche Fuji" },
+    { "trait_type": "Edition", "value": "#0001" }
+  ]
+}

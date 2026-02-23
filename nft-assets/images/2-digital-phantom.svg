@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <linearGradient id="dp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071a22"/>
+      <stop offset="100%" stop-color="#050510"/>
+    </linearGradient>
+    <filter id="dp-glow">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="dp-glow-lg">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <clipPath id="dp-frame">
+      <rect x="60" y="60" width="480" height="480" rx="12"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="600" fill="url(#dp-bg)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#06b6d4" stroke-opacity="0.025" stroke-width="0.5">
+    <line x1="0" y1="30" x2="600" y2="30"/><line x1="0" y1="60" x2="600" y2="60"/>
+    <line x1="0" y1="90" x2="600" y2="90"/><line x1="0" y1="120" x2="600" y2="120"/>
+    <line x1="0" y1="150" x2="600" y2="150"/><line x1="0" y1="180" x2="600" y2="180"/>
+    <line x1="0" y1="210" x2="600" y2="210"/><line x1="0" y1="240" x2="600" y2="240"/>
+    <line x1="0" y1="270" x2="600" y2="270"/><line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="330" x2="600" y2="330"/><line x1="0" y1="360" x2="600" y2="360"/>
+    <line x1="0" y1="390" x2="600" y2="390"/><line x1="0" y1="420" x2="600" y2="420"/>
+    <line x1="0" y1="450" x2="600" y2="450"/><line x1="0" y1="480" x2="600" y2="480"/>
+    <line x1="0" y1="510" x2="600" y2="510"/><line x1="0" y1="540" x2="600" y2="540"/>
+    <line x1="0" y1="570" x2="600" y2="570"/>
+  </g>
+
+  <g clip-path="url(#dp-frame)">
+    <!-- Ambient glow -->
+    <ellipse cx="300" cy="300" rx="180" ry="160" fill="#06b6d4" fill-opacity="0.03" filter="url(#dp-glow-lg)"/>
+
+    <!-- Glitch rectangles — RGB channel separation -->
+    <!-- Red channel -->
+    <rect x="170" y="160" width="260" height="280" rx="8" fill="none" stroke="#ef4444" stroke-opacity="0.12" stroke-width="2">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 5,-2; -3,3; 1,-1; 0,0" dur="6s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Main cyan frame -->
+    <rect x="175" y="165" width="250" height="270" rx="6" fill="none" stroke="#06b6d4" stroke-opacity="0.25" stroke-width="2.5"/>
+    <rect x="175" y="165" width="250" height="270" rx="6" fill="#06b6d4" fill-opacity="0.015"/>
+
+    <!-- Blue channel -->
+    <rect x="180" y="170" width="240" height="260" rx="4" fill="none" stroke="#3b82f6" stroke-opacity="0.1" stroke-width="2">
+      <animateTransform attributeName="transform" type="translate" values="0,0; -4,2; 3,-2; -1,1; 0,0" dur="5s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Inner diamond / eye shape -->
+    <path d="M300,220 L380,300 L300,380 L220,300 Z" fill="none" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="2">
+      <animate attributeName="stroke-opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M300,245 L355,300 L300,355 L245,300 Z" fill="#06b6d4" fill-opacity="0.03" stroke="#22d3ee" stroke-opacity="0.15" stroke-width="1"/>
+
+    <!-- Eye - outer ring -->
+    <circle cx="300" cy="300" r="35" fill="none" stroke="#06b6d4" stroke-opacity="0.2" stroke-width="1.5">
+      <animate attributeName="r" values="35;38;35" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Eye - iris -->
+    <circle cx="300" cy="300" r="22" fill="#06b6d4" fill-opacity="0.06" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1">
+      <animate attributeName="stroke-opacity" values="0.3;0.5;0.3" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Eye - pupil -->
+    <circle cx="300" cy="300" r="10" fill="#06b6d4" fill-opacity="0.15">
+      <animate attributeName="r" values="10;12;10" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="300" r="4" fill="#06b6d4" fill-opacity="0.5"/>
+    <circle cx="300" cy="300" r="1.5" fill="#fff" fill-opacity="0.8"/>
+
+    <!-- Highlight reflection in eye -->
+    <circle cx="308" cy="294" r="3" fill="#fff" fill-opacity="0.15"/>
+
+    <!-- Scan line -->
+    <rect x="60" y="0" width="480" height="3" fill="#06b6d4" opacity="0.08" rx="1">
+      <animate attributeName="y" values="-3;600" dur="5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="60" y="0" width="480" height="1.5" fill="#22d3ee" opacity="0.05" rx="1">
+      <animate attributeName="y" values="600;-3" dur="7s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Glitch bars — horizontal interference -->
+    <rect x="90" y="130" width="420" height="1.5" fill="#06b6d4" opacity="0.04">
+      <animate attributeName="width" values="420;300;420" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="120" y="210" width="360" height="1" fill="#06b6d4" opacity="0.05">
+      <animate attributeName="width" values="360;250;360" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="x" values="120;150;120" dur="2.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="100" y="340" width="400" height="1.5" fill="#22d3ee" opacity="0.04">
+      <animate attributeName="width" values="400;280;400" dur="4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="140" y="410" width="320" height="1" fill="#06b6d4" opacity="0.06">
+      <animate attributeName="width" values="320;200;320" dur="3.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="80" y="470" width="440" height="1.5" fill="#06b6d4" opacity="0.03">
+      <animate attributeName="width" values="440;350;440" dur="2.8s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Corner markers -->
+    <path d="M185,175 L185,195 M185,175 L205,175" fill="none" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1.5"/>
+    <path d="M415,175 L415,195 M415,175 L395,175" fill="none" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1.5"/>
+    <path d="M185,425 L185,405 M185,425 L205,425" fill="none" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1.5"/>
+    <path d="M415,425 L415,405 M415,425 L395,425" fill="none" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1.5"/>
+
+    <!-- Data streams -->
+    <text x="90" y="535" fill="#06b6d4" fill-opacity="0.1" font-family="monospace" font-size="9" letter-spacing="2">01001 10110 01101 00110 11010 01001</text>
+    <text x="90" y="550" fill="#06b6d4" fill-opacity="0.07" font-family="monospace" font-size="9" letter-spacing="2">11010 00101 10011 01110 00101 11001</text>
+    <text x="90" y="100" fill="#06b6d4" fill-opacity="0.08" font-family="monospace" font-size="9" letter-spacing="2">0xFA C1 NE 7D 1G 1T 4L PH 4N T0 M</text>
+  </g>
+
+  <!-- Title watermark -->
+  <text x="300" y="585" text-anchor="middle" fill="#06b6d4" fill-opacity="0.1" font-family="monospace" font-size="10" letter-spacing="4">DIGITAL PHANTOM</text>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "name": "Quantum Bloom",
+  "description": "An impossible flower that exists in superposition, its petals simultaneously open and closed until observed. Layered mandala geometries rotate in opposing directions around a pulsing core of light.",
+  "image": "ipfs://bafybeidjtwb5bj3eufybjvr4swrfkvga4c5bedcpg4hm2inutfpvc3e5ty/3-quantum-bloom.svg",
+  "external_url": "https://facinet.vercel.app",
+  "attributes": [
+    { "trait_type": "Collection", "value": "Facinet Genesis" },
+    { "trait_type": "Rarity", "value": "Epic" },
+    { "trait_type": "Style", "value": "Mandala" },
+    { "trait_type": "Color Theme", "value": "Pink / Rose" },
+    { "trait_type": "Animation", "value": "Yes" },
+    { "trait_type": "Price (USDC)", "display_type": "number", "value": 3 },
+    { "trait_type": "Network", "value": "Avalanche Fuji" },
+    { "trait_type": "Edition", "value": "#0003" }
+  ]
+}
