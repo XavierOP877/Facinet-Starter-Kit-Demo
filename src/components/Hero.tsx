@@ -1,14 +1,15 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Aurora orbs */}
-      <div className="aurora-orb w-[500px] h-[500px] bg-neon-purple/20 -top-40 -left-40 animate-float" />
-      <div className="aurora-orb w-[400px] h-[400px] bg-neon-cyan/15 top-20 -right-20 animate-float-delayed" />
-      <div className="aurora-orb w-[300px] h-[300px] bg-neon-pink/10 bottom-20 left-1/3 animate-float" />
+      <div className="aurora-orb w-[500px] h-[500px] bg-red-600/20 -top-40 -left-40 animate-float" />
+      <div className="aurora-orb w-[400px] h-[400px] bg-orange-500/15 top-20 -right-20 animate-float-delayed" />
+      <div className="aurora-orb w-[300px] h-[300px] bg-red-500/10 bottom-20 left-1/3 animate-float" />
 
       {/* Grid pattern */}
       <div
@@ -24,6 +25,22 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex justify-center mb-6"
+        >
+          <Image
+            src="/logo.png"
+            alt="Avalanche Team1 India"
+            width={100}
+            height={100}
+            className="rounded-2xl"
+          />
+        </motion.div>
+
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -31,9 +48,9 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] mb-8"
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-neon-emerald animate-pulse" />
+          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
           <span className="text-[11px] font-mono text-white/50 uppercase tracking-widest">
-            Powered by Facinet SDK
+            Avalanche Team1 India
           </span>
         </motion.div>
 
@@ -44,8 +61,8 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-6"
         >
-          <span className="block text-white">Gasless</span>
-          <span className="block gradient-text">NFT Trading</span>
+          <span className="block text-white">Claim Your</span>
+          <span className="block gradient-text">Genesis NFT</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -55,10 +72,11 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-base sm:text-lg text-white/40 max-w-xl mx-auto leading-relaxed mb-10"
         >
-          Collect unique digital art with{' '}
-          <span className="text-white/70">zero gas fees</span>. Pay in USDC,
-          sign once, and the Facinet facilitator network handles the rest on{' '}
-          <span className="text-neon-cyan/70">Avalanche Fuji</span>.
+          Connect your{' '}
+          <span className="text-white/70">Core Wallet</span>, get some testnet
+          AVAX, and claim your exclusive{' '}
+          <span className="text-red-400">Avalanche Team1 India Genesis NFT</span>.
+          Then copy the tx hash and submit it to us.
         </motion.p>
 
         {/* CTA */}
@@ -69,21 +87,21 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
-            href="#gallery"
-            className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-neon-purple to-neon-cyan text-white text-sm font-semibold tracking-wide hover:shadow-xl hover:shadow-neon-purple/25 transition-all"
+            href="#claim"
+            className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white text-sm font-semibold tracking-wide hover:shadow-xl hover:shadow-red-500/25 transition-all"
           >
-            Explore Collection
-            <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">
+            Claim NFT
+            <span className="inline-block ml-2 group-hover:translate-y-1 transition-transform">
               &darr;
             </span>
           </a>
           <a
-            href="https://www.npmjs.com/package/facinet"
+            href="https://core.app/tools/testnet-faucet/?subnet=c&token=c"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-sm font-medium hover:text-white/80 hover:bg-white/[0.06] transition-all"
           >
-            View SDK Docs
+            Get Testnet AVAX
           </a>
         </motion.div>
 
@@ -95,9 +113,9 @@ export default function Hero() {
           className="flex items-center justify-center gap-8 sm:gap-12 mt-16"
         >
           {[
-            { value: '0', label: 'Gas Fees' },
-            { value: '4', label: 'Unique NFTs' },
-            { value: 'USDC', label: 'Payment' },
+            { value: '500', label: 'Total Supply' },
+            { value: 'Free', label: 'Mint Price' },
+            { value: 'Core', label: 'Wallet' },
             { value: 'Fuji', label: 'Network' },
           ].map((stat) => (
             <div key={stat.label} className="text-center">

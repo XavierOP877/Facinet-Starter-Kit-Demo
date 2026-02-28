@@ -100,7 +100,7 @@ body {
    Gradient Text
    ============================== */
 .gradient-text {
-  background: linear-gradient(135deg, var(--purple), var(--cyan), var(--pink));
+  background: linear-gradient(135deg, #e53e3e, #ed8936, #e53e3e);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

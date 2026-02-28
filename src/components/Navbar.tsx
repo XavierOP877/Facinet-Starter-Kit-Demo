@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface NavbarProps {
   wallet: {
@@ -39,15 +40,16 @@ export default function Navbar({ wallet }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="relative w-8 h-8">
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-neon-purple to-neon-cyan animate-spin-slow" />
-            <div className="absolute inset-[2px] rounded-[6px] bg-void flex items-center justify-center">
-              <span className="text-xs font-bold gradient-text">F</span>
-            </div>
-          </div>
+          <Image
+            src="/logo.png"
+            alt="Avalanche Team1 India"
+            width={36}
+            height={36}
+            className="rounded-lg"
+          />
           <span className="text-sm font-semibold tracking-wide">
-            <span className="text-white/90">Facinet</span>
-            <span className="text-white/40 ml-1">SDK Demo</span>
+            <span className="text-white/90">Avalanche Team1</span>
+            <span className="text-red-500 ml-1">India</span>
           </span>
         </div>
 
@@ -78,7 +80,7 @@ export default function Navbar({ wallet }: NavbarProps) {
               whileTap={{ scale: 0.98 }}
               onClick={wallet.connect}
               disabled={wallet.isConnecting}
-              className="relative px-5 py-2 rounded-full bg-gradient-to-r from-neon-purple to-neon-cyan text-white text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-neon-purple/20 transition-all disabled:opacity-50 cursor-pointer"
+              className="relative px-5 py-2 rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-red-500/20 transition-all disabled:opacity-50 cursor-pointer"
             >
               {wallet.isConnecting ? (
                 <span className="flex items-center gap-2">
@@ -106,7 +108,7 @@ export default function Navbar({ wallet }: NavbarProps) {
                   Connecting...
                 </span>
               ) : (
-                'Connect Wallet'
+                'Connect Core Wallet'
               )}
             </motion.button>
           )}

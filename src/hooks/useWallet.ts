@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { FACINET_CONFIG } from '@/lib/config';
+import { APP_CONFIG } from '@/lib/config';
 
 export interface WalletState {
   address: string | null;
@@ -9,6 +9,28 @@ export interface WalletState {
   isConnected: boolean;
   isConnecting: boolean;
   error: string | null;
+  showInstallPopup: boolean;
+}
+
+function getCoreProvider(): any | null {
+  if (typeof window === 'undefined') return null;
+
+  // Core Wallet injects window.avalanche
+  if ((window as any).avalanche) {
+    return (window as any).avalanche;
+  }
+
+  // Fallback: check window.ethereum for Core Wallet
+  if (window.ethereum?.isAvalanche) {
+    return window.ethereum;
+  }
+
+  // Check if window.ethereum is from Core (some versions)
+  if (window.ethereum && (window.ethereum as any).isCoreWallet) {
+    return window.ethereum;
+  }
+
+  return null;
 }
 
 export function useWallet() {
@@ -18,44 +40,51 @@ export function useWallet() {
     isConnected: false,
     isConnecting: false,
     error: null,
+    showInstallPopup: false,
   });
 
+  const dismissInstallPopup = useCallback(() => {
+    setWallet((prev) => ({ ...prev, showInstallPopup: false }));
+  }, []);
+
   const connect = useCallback(async () => {
-    if (typeof window === 'undefined' || !window.ethereum) {
+    const provider = getCoreProvider();
+
+    if (!provider) {
       setWallet((prev) => ({
         ...prev,
-        error: 'MetaMask not found. Please install MetaMask.',
+        showInstallPopup: true,
+        error: 'Core Wallet not found. Please install Core Wallet.',
       }));
       return null;
     }
 
-    setWallet((prev) => ({ ...prev, isConnecting: true, error: null }));
+    setWallet((prev) => ({ ...prev, isConnecting: true, error: null, showInstallPopup: false }));
 
     try {
       // Request accounts
-      const accounts = (await window.ethereum.request({
+      const accounts = (await provider.request({
         method: 'eth_requestAccounts',
       })) as string[];
 
       // Check current chain
-      const currentChainId = (await window.ethereum.request({
+      const currentChainId = (await provider.request({
         method: 'eth_chainId',
       })) as string;
 
       // Switch to Avalanche Fuji if not already on it
-      if (parseInt(currentChainId, 16) !== FACINET_CONFIG.chainId) {
+      if (parseInt(currentChainId, 16) !== APP_CONFIG.chainId) {
         try {
-          await window.ethereum.request({
+          await provider.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: FACINET_CONFIG.chainIdHex }],
+            params: [{ chainId: APP_CONFIG.chainIdHex }],
           });
         } catch (switchError: unknown) {
           const err = switchError as { code?: number };
-          // Chain not added to MetaMask — add it
           if (err.code === 4902) {
-            await window.ethereum.request({
+            await provider.request({
               method: 'wallet_addEthereumChain',
-              params: [FACINET_CONFIG.networkParams],
+              params: [APP_CONFIG.networkParams],
             });
           } else {
             throw switchError;
@@ -65,10 +94,11 @@ export function useWallet() {
 
       setWallet({
         address: accounts[0],
-        chainId: FACINET_CONFIG.chainId,
+        chainId: APP_CONFIG.chainId,
         isConnected: true,
         isConnecting: false,
         error: null,
+        showInstallPopup: false,
       });
 
       return accounts[0];
@@ -90,12 +120,14 @@ export function useWallet() {
       isConnected: false,
       isConnecting: false,
       error: null,
+      showInstallPopup: false,
     });
   }, []);
 
   // Listen for account and chain changes
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.ethereum) return;
+    const provider = getCoreProvider();
+    if (!provider) return;
 
     const handleAccountsChanged = (...args: unknown[]) => {
       const accounts = args[0] as string[];
@@ -110,17 +142,14 @@ export function useWallet() {
       window.location.reload();
     };
 
-    window.ethereum.on('accountsChanged', handleAccountsChanged);
-    window.ethereum.on('chainChanged', handleChainChanged);
+    provider.on('accountsChanged', handleAccountsChanged);
+    provider.on('chainChanged', handleChainChanged);
 
     return () => {
-      window.ethereum?.removeListener(
-        'accountsChanged',
-        handleAccountsChanged
-      );
-      window.ethereum?.removeListener('chainChanged', handleChainChanged);
+      provider.removeListener?.('accountsChanged', handleAccountsChanged);
+      provider.removeListener?.('chainChanged', handleChainChanged);
     };
   }, [disconnect]);
 
-  return { ...wallet, connect, disconnect };
+  return { ...wallet, connect, disconnect, dismissInstallPopup };
 }

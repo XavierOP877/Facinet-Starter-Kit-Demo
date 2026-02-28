@@ -1,0 +1,23 @@
+{
+  "name": "Avalanche Team1 India Genesis",
+  "description": "Your journey has started. This Genesis NFT proves you are part of the Avalanche Team1 India community. Prepare for impact.",
+  "image": "ipfs://bafybeihcq6e5bhcmv5cudodmnnd2p2jrrwudtl6yhwl6fjuxhapnvnjnqu",
+  "attributes": [
+    {
+      "trait_type": "Collection",
+      "value": "Genesis"
+    },
+    {
+      "trait_type": "Community",
+      "value": "Avalanche Team1 India"
+    },
+    {
+      "trait_type": "Network",
+      "value": "Avalanche Fuji"
+    },
+    {
+      "trait_type": "Supply",
+      "value": "500"
+    }
+  ]
+}

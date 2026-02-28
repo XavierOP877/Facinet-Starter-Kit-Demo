@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Facinet SDK Starter | Gasless NFT Marketplace',
+  title: 'Avalanche Team1 India | Genesis NFT Claim',
   description:
-    'A demo NFT marketplace powered by Facinet SDK — gasless USDC payments on Avalanche Fuji.',
+    'Claim your Avalanche Team1 India Genesis NFT on Avalanche Fuji Testnet. Connect Core Wallet, claim your NFT, and submit your transaction hash.',
 };
 
 export default function RootLayout({

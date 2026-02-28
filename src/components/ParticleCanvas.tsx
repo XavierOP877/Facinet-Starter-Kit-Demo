@@ -13,10 +13,10 @@ interface Particle {
 }
 
 const COLORS = [
-  'rgba(139, 92, 246,',  // purple
-  'rgba(6, 182, 212,',   // cyan
-  'rgba(236, 72, 153,',  // pink
-  'rgba(16, 185, 129,',  // emerald
+  'rgba(229, 62, 62,',   // red
+  'rgba(237, 137, 54,',  // orange
+  'rgba(252, 211, 77,',  // amber
+  'rgba(255, 255, 255,', // white
 ];
 
 export default function ParticleCanvas() {

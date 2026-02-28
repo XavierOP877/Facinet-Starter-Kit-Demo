@@ -1,26 +1,21 @@
 // ============================================
-// Facinet SDK Starter Demo - Configuration
+// Avalanche Team1 India - Configuration
 // ============================================
 
-export const FACINET_CONFIG = {
+export const APP_CONFIG = {
   // Network: Avalanche Fuji Testnet
-  network: 'avalanche-fuji' as const,
   chainId: 43113,
   chainIdHex: '0xA869',
   rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
 
-  // Recipient wallet for USDC payments (set in .env.local)
-  recipientAddress: (process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS ||
-    '0x0000000000000000000000000000000000000000') as `0x${string}`,
-
-  // Deployed FacinetNFT contract address (set in .env.local after deploying)
+  // Deployed Team1IndiaNFT contract address (set in .env.local after deploying)
   nftContractAddress: (process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
     '0x0000000000000000000000000000000000000000') as `0x${string}`,
 
-  // Supply per NFT type
-  maxPerType: 10,
+  // Max supply
+  maxSupply: 500,
 
-  // Avalanche Fuji network details (for MetaMask)
+  // Avalanche Fuji network details (for wallet)
   networkParams: {
     chainId: '0xA869',
     chainName: 'Avalanche Fuji C-Chain',
@@ -35,19 +30,20 @@ export const FACINET_CONFIG = {
 
   // Block explorer for transaction links
   explorerUrl: 'https://testnet.snowtrace.io',
+
+  // Core Wallet install link
+  coreWalletInstallUrl:
+    'https://chromewebstore.google.com/detail/core-wallet-crypto-made-e/agoakfejjabomempkjlepdflaleeobhb?hl=gu',
 };
 
 // ============================================
-// FacinetNFT Contract ABI (minimal — only what the frontend needs)
+// Team1IndiaNFT Contract ABI (minimal)
 // ============================================
 export const NFT_CONTRACT_ABI = [
   // --- Write functions ---
   {
-    inputs: [
-      { name: 'to', type: 'address' },
-      { name: 'nftType', type: 'uint256' },
-    ],
-    name: 'mint',
+    inputs: [],
+    name: 'claim',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -55,28 +51,7 @@ export const NFT_CONTRACT_ABI = [
   // --- Read functions ---
   {
     inputs: [],
-    name: 'getAvailability',
-    outputs: [{ name: '', type: 'uint256[4]' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'nftType', type: 'uint256' }],
-    name: 'isSoldOut',
-    outputs: [{ name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'nftType', type: 'uint256' }],
     name: 'remainingSupply',
-    outputs: [{ name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ name: 'nftType', type: 'uint256' }],
-    name: 'mintedCount',
     outputs: [{ name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -84,6 +59,13 @@ export const NFT_CONTRACT_ABI = [
   {
     inputs: [],
     name: 'totalMinted',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'MAX_SUPPLY',
     outputs: [{ name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',

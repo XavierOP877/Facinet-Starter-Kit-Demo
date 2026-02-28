@@ -1,23 +1,15 @@
 'use client';
 
-// ============================================
-// Purchase Modal — NFT Purchase Flow
-// Uses Facinet SDK for:
-//   1. Gasless USDC payment  (facinet.pay)
-//   2. Gasless NFT minting   (facinet.executeContract)
-// ============================================
-
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import NFTArt from './NFTArt';
-import { useFacinet, PurchasePhase } from '@/hooks/useFacinet';
-import { FACINET_CONFIG } from '@/lib/config';
-import { NFT } from '@/lib/nfts';
+import Image from 'next/image';
+import { useMintNFT, MintPhase } from '@/hooks/useMintNFT';
+import { APP_CONFIG } from '@/lib/config';
+import { GENESIS_NFT } from '@/lib/nfts';
 
-type PurchaseStep = 'review' | 'processing' | 'success' | 'error';
+type ClaimStep = 'review' | 'processing' | 'success' | 'error';
 
-interface PurchaseModalProps {
-  nft: NFT;
+interface ClaimModalProps {
   wallet: {
     address: string | null;
     isConnected: boolean;
@@ -26,13 +18,10 @@ interface PurchaseModalProps {
   onClose: () => void;
 }
 
-export default function PurchaseModal({
-  nft,
-  wallet,
-  onClose,
-}: PurchaseModalProps) {
-  const [step, setStep] = useState<PurchaseStep>('review');
-  const { purchaseNFT, phase, error, result, reset } = useFacinet();
+export default function ClaimModal({ wallet, onClose }: ClaimModalProps) {
+  const [step, setStep] = useState<ClaimStep>('review');
+  const { mintNFT, phase, error, result, reset } = useMintNFT();
+  const [copied, setCopied] = useState(false);
   const [confetti, setConfetti] = useState<
     { x: number; color: string; delay: number; size: number; round: boolean }[]
   >([]);
@@ -42,7 +31,7 @@ export default function PurchaseModal({
     if (step === 'success') {
       const pieces = Array.from({ length: 30 }, () => ({
         x: Math.random() * 100,
-        color: [nft.colorPrimary, nft.colorSecondary, '#fff', '#fbbf24'][
+        color: ['#e53e3e', '#ed8936', '#fff', '#fbbf24'][
           Math.floor(Math.random() * 4)
         ],
         delay: Math.random() * 0.5,
@@ -51,7 +40,7 @@ export default function PurchaseModal({
       }));
       setConfetti(pieces);
     }
-  }, [step, nft.colorPrimary, nft.colorSecondary]);
+  }, [step]);
 
   // Close on Escape
   useEffect(() => {
@@ -62,7 +51,7 @@ export default function PurchaseModal({
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose, step]);
 
-  const handlePurchase = useCallback(async () => {
+  const handleClaim = useCallback(async () => {
     if (!wallet.isConnected || !wallet.address) {
       await wallet.connect();
       return;
@@ -71,29 +60,40 @@ export default function PurchaseModal({
     setStep('processing');
 
     try {
-      // ============================================
-      // >>> FACINET SDK CALLS HAPPEN HERE <<<
-      // The useFacinet hook calls:
-      //   1. facinet.pay()            — USDC payment (gasless)
-      //   2. facinet.executeContract() — NFT mint (gasless)
-      // See: src/hooks/useFacinet.ts lines 50-77
-      // ============================================
-      await purchaseNFT(nft.nftType, nft.price, wallet.address);
+      await mintNFT();
       setStep('success');
     } catch {
       setStep('error');
     }
-  }, [wallet, nft, purchaseNFT]);
+  }, [wallet, mintNFT]);
 
   const handleRetry = () => {
     reset();
     setStep('review');
   };
 
-  // Map phase to step index for the progress indicator
-  const phaseToStepIndex = (p: PurchasePhase): number => {
+  const handleCopyTxHash = async () => {
+    if (!result?.txHash) return;
+    try {
+      await navigator.clipboard.writeText(result.txHash);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback
+      const textArea = document.createElement('textarea');
+      textArea.value = result.txHash;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const phaseToStepIndex = (p: MintPhase): number => {
     switch (p) {
-      case 'paying':
+      case 'confirming':
         return 0;
       case 'minting':
         return 1;
@@ -155,13 +155,14 @@ export default function PurchaseModal({
 
           {/* NFT Preview */}
           <div className="relative p-6 pb-0">
-            <div
-              className="rounded-2xl overflow-hidden border border-white/[0.04]"
-              style={{
-                boxShadow: `0 0 60px ${nft.colorPrimary}10`,
-              }}
-            >
-              <NFTArt id={nft.id} />
+            <div className="rounded-2xl overflow-hidden border border-white/[0.04] shadow-lg shadow-red-500/5">
+              <Image
+                src="/nft.png"
+                alt="Avalanche Team1 India Genesis NFT"
+                width={400}
+                height={400}
+                className="w-full h-auto"
+              />
             </div>
           </div>
 
@@ -173,36 +174,25 @@ export default function PurchaseModal({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <div className="flex items-start justify-between mb-1">
-                  <h3 className="text-lg font-bold text-white/90">
-                    {nft.name}
-                  </h3>
-                  <span className="text-[10px] font-mono text-white/25 mt-1.5">
-                    {nft.edition}
-                  </span>
-                </div>
+                <h3 className="text-lg font-bold text-white/90 mb-1">
+                  {GENESIS_NFT.name}
+                </h3>
                 <p className="text-xs text-white/30 leading-relaxed mb-5">
-                  {nft.description}
+                  {GENESIS_NFT.description}
                 </p>
 
-                {/* Price breakdown */}
+                {/* Details */}
                 <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4 mb-5 space-y-2.5">
                   <div className="flex justify-between text-xs">
-                    <span className="text-white/40">NFT Price</span>
-                    <span className="text-white/70 font-medium">
-                      {nft.price} USDC
+                    <span className="text-white/40">Price</span>
+                    <span className="text-neon-emerald font-medium">
+                      Free
                     </span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Gas Fee (Payment)</span>
-                    <span className="text-neon-emerald font-medium">
-                      0 (Gasless!)
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Gas Fee (Mint)</span>
-                    <span className="text-neon-emerald font-medium">
-                      0 (Gasless!)
+                    <span className="text-white/40">Gas Fee</span>
+                    <span className="text-white/50 font-mono text-[11px]">
+                      ~0.001 AVAX (testnet)
                     </span>
                   </div>
                   <div className="flex justify-between text-xs">
@@ -212,40 +202,31 @@ export default function PurchaseModal({
                     </span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Type</span>
+                    <span className="text-white/40">Supply</span>
                     <span className="text-white/50 font-mono text-[11px]">
-                      #{nft.nftType} — 10 editions
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Powered by</span>
-                    <span className="text-neon-purple font-medium">
-                      Facinet SDK
+                      500 editions
                     </span>
                   </div>
                   <div className="border-t border-white/[0.04] pt-2.5 flex justify-between">
                     <span className="text-xs text-white/50 font-medium">
-                      Total
+                      Total Cost
                     </span>
                     <span className="text-sm text-white font-bold">
-                      {nft.price} USDC + 0 Gas
+                      Only Gas (~0.001 AVAX)
                     </span>
                   </div>
                 </div>
 
-                {/* Action button */}
+                {/* Claim button */}
                 <motion.button
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  onClick={handlePurchase}
-                  className="w-full py-3.5 rounded-xl text-sm font-semibold tracking-wide transition-all cursor-pointer"
-                  style={{
-                    background: `linear-gradient(135deg, ${nft.colorPrimary}, ${nft.colorSecondary})`,
-                  }}
+                  onClick={handleClaim}
+                  className="w-full py-3.5 rounded-xl text-sm font-semibold tracking-wide transition-all cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white hover:shadow-lg hover:shadow-red-500/20"
                 >
                   {!wallet.isConnected
-                    ? 'Connect Wallet to Purchase'
-                    : `Pay ${nft.price} USDC & Mint NFT — Gasless`}
+                    ? 'Connect Core Wallet to Claim'
+                    : 'Claim Genesis NFT'}
                 </motion.button>
 
                 {wallet.isConnected && wallet.address && (
@@ -269,48 +250,45 @@ export default function PurchaseModal({
                   <div
                     className="absolute inset-0 rounded-full border-2 border-transparent animate-spin"
                     style={{
-                      borderTopColor: nft.colorPrimary,
+                      borderTopColor: '#e53e3e',
                       animationDuration: '1s',
                     }}
                   />
                   <div
                     className="absolute inset-2 rounded-full border-2 border-transparent animate-spin"
                     style={{
-                      borderBottomColor: nft.colorSecondary,
+                      borderBottomColor: '#ed8936',
                       animationDuration: '1.5s',
                       animationDirection: 'reverse',
                     }}
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      className="w-2 h-2 rounded-full animate-pulse"
-                      style={{ background: nft.colorPrimary }}
-                    />
+                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                   </div>
                 </div>
 
                 <h3 className="text-base font-semibold text-white/80 mb-2">
-                  {phase === 'paying' && 'Paying USDC...'}
-                  {phase === 'minting' && 'Minting NFT...'}
+                  {phase === 'confirming' && 'Confirm in Core Wallet...'}
+                  {phase === 'minting' && 'Minting your NFT...'}
                   {phase === 'idle' && 'Preparing...'}
                   {phase === 'done' && 'Confirming...'}
                 </h3>
                 <p className="text-xs text-white/30 leading-relaxed max-w-xs mx-auto">
-                  {phase === 'paying' && (
+                  {phase === 'confirming' && (
                     <>
-                      Sign the USDC payment in MetaMask.
+                      Please confirm the transaction in your Core Wallet.
                       <br />
                       <span className="text-white/20">
-                        Facilitator covers the gas via facinet.pay()
+                        You will pay a small gas fee in AVAX
                       </span>
                     </>
                   )}
                   {phase === 'minting' && (
                     <>
-                      Payment confirmed! Now minting your NFT...
+                      Transaction submitted! Waiting for confirmation...
                       <br />
                       <span className="text-white/20">
-                        Facilitator calls mint() via facinet.executeContract()
+                        Your Genesis NFT is being minted
                       </span>
                     </>
                   )}
@@ -321,11 +299,11 @@ export default function PurchaseModal({
                   )}
                 </p>
 
-                {/* Step indicators — now showing Pay → Mint → Done */}
+                {/* Step indicators */}
                 <div className="flex items-center justify-center gap-2 mt-6">
                   {[
-                    { label: 'Pay USDC', desc: 'facinet.pay()' },
-                    { label: 'Mint NFT', desc: 'executeContract()' },
+                    { label: 'Confirm', desc: 'Approve Tx' },
+                    { label: 'Mint', desc: 'On-chain' },
                     { label: 'Done', desc: 'Confirmed' },
                   ].map((item, i) => (
                     <div key={item.label} className="flex items-center gap-2">
@@ -374,19 +352,13 @@ export default function PurchaseModal({
                 className="text-center py-2"
               >
                 {/* Checkmark */}
-                <div
-                  className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
-                  style={{
-                    background: `${nft.colorPrimary}15`,
-                    border: `2px solid ${nft.colorPrimary}40`,
-                  }}
-                >
+                <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-neon-emerald/10 border-2 border-neon-emerald/40">
                   <svg
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke={nft.colorPrimary}
+                    stroke="#10b981"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -396,72 +368,47 @@ export default function PurchaseModal({
                 </div>
 
                 <h3 className="text-lg font-bold text-white/90 mb-1">
-                  NFT Purchased & Minted!
+                  Genesis NFT Claimed!
                 </h3>
                 <p className="text-xs text-white/30 mb-5">
-                  Gasless payment + mint processed by{' '}
-                  <span style={{ color: nft.colorPrimary }}>
-                    {result.facilitatorName}
-                  </span>
+                  Your Avalanche Team1 India Genesis NFT is now in your wallet.
                 </p>
 
-                {/* Transaction details */}
-                <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4 text-left space-y-2 mb-5">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Payment Tx</span>
-                    <a
-                      href={`${FACINET_CONFIG.explorerUrl}/tx/${result.paymentTxHash}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-[11px] hover:underline"
-                      style={{ color: nft.colorPrimary }}
+                {/* Transaction Hash - PROMINENT */}
+                <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4 mb-4">
+                  <div className="text-[10px] text-white/40 uppercase tracking-wider mb-2">
+                    Transaction Hash
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/[0.03] rounded-lg p-3 border border-white/[0.06]">
+                    <code className="text-[11px] font-mono text-white/70 flex-1 break-all">
+                      {result.txHash}
+                    </code>
+                    <button
+                      onClick={handleCopyTxHash}
+                      className="flex-shrink-0 px-3 py-1.5 rounded-lg bg-red-600/20 border border-red-500/30 text-red-400 text-[10px] font-semibold hover:bg-red-600/30 transition-all cursor-pointer"
                     >
-                      {result.paymentTxHash.slice(0, 8)}...{result.paymentTxHash.slice(-6)}
-                    </a>
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
                   </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Mint Tx</span>
-                    <a
-                      href={`${FACINET_CONFIG.explorerUrl}/tx/${result.mintTxHash}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-[11px] hover:underline"
-                      style={{ color: nft.colorPrimary }}
-                    >
-                      {result.mintTxHash.slice(0, 8)}...{result.mintTxHash.slice(-6)}
-                    </a>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Amount</span>
-                    <span className="text-white/70">{nft.price} USDC</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Edition</span>
-                    <span className="text-white/70 font-mono">1 of 10</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Facilitator</span>
-                    <span className="text-white/50">
-                      {result.facilitatorName}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Network</span>
-                    <span className="text-white/50 font-mono text-[11px]">
-                      {result.network}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Gas Paid</span>
-                    <span className="text-neon-emerald">
-                      $0.00 (Facinet covered both txs!)
-                    </span>
-                  </div>
+                  <a
+                    href={`${APP_CONFIG.explorerUrl}/tx/${result.txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-red-400 hover:text-red-300 mt-2 transition-colors"
+                  >
+                    View on Explorer
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                    </svg>
+                  </a>
                 </div>
 
-                <p className="text-[10px] text-white/20 mb-4">
-                  The NFT is now in your wallet. Check MetaMask or Snowtrace to view it.
-                </p>
+                {/* Important message */}
+                <div className="rounded-xl bg-red-500/5 border border-red-500/10 p-3 mb-5">
+                  <p className="text-[11px] text-red-400/80 leading-relaxed">
+                    Copy your transaction hash above and submit it to Avalanche Team1 India as proof of claim.
+                  </p>
+                </div>
 
                 <button
                   onClick={onClose}
@@ -495,7 +442,7 @@ export default function PurchaseModal({
                 </div>
 
                 <h3 className="text-base font-semibold text-white/80 mb-2">
-                  Transaction Failed
+                  Claim Failed
                 </h3>
                 <p className="text-xs text-red-400/60 mb-5 max-w-xs mx-auto">
                   {error || 'Something went wrong. Please try again.'}
@@ -510,10 +457,7 @@ export default function PurchaseModal({
                   </button>
                   <button
                     onClick={handleRetry}
-                    className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer"
-                    style={{
-                      background: `linear-gradient(135deg, ${nft.colorPrimary}, ${nft.colorSecondary})`,
-                    }}
+                    className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white"
                   >
                     Retry
                   </button>
